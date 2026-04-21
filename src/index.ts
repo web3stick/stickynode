@@ -1,12 +1,20 @@
-import { mount } from 'svelte';
-import App from './App.svelte';
-import './index.css';
-
-const app = mount(App, {
-  target: document.body,
-  props: {
-    name: 'world',
-  },
-});
-
-export default app;
+import { mount } from "svelte";
+import App from "./App.svelte";
+import "./css/index.css";
+import "./ts/hello";
+import "@sleet-css/sticky-css/main.css";
+// ========================================
+function start() {
+  const target = document.getElementById("root");
+  if (!target) {
+    console.error("Mount target #root not found");
+    return;
+  }
+  mount(App, { target });
+}
+// ========================================
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", start);
+} else {
+  start();
+}

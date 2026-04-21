@@ -1,36 +1,26 @@
-# Rsbuild project
+# stickynode
 
-## Setup
+🟨 how to set up and run a near node, json schema for config
 
-Install the dependencies:
+---
 
-```bash
-bun install
-```
-
-## Get started
-
-Start the dev server, and the app will be available at [http://localhost:3000](http://localhost:3000).
+DEV
 
 ```bash
+bun i
 bun run dev
-```
-
-Build the app for production:
-
-```bash
 bun run build
+bun run svelte-check
+
+bun run tsc --noEmit
+bunx prettier . --write
+
+# netlify
+# stickyweb-stickynode
+netlify deploy
+netlify deploy --prod
 ```
 
-Preview the production build locally:
+---
 
-```bash
-bun run preview
-```
-
-## Learn more
-
-To learn more about Rsbuild, check out the following resources:
-
-- [Rsbuild documentation](https://rsbuild.rs) - explore Rsbuild features and APIs.
-- [Rsbuild GitHub repository](https://github.com/web-infra-dev/rsbuild) - your feedback and contributions are welcome!
+copyright 2026 by sleet.near

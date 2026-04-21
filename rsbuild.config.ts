@@ -4,4 +4,8 @@ import { pluginSvelte } from '@rsbuild/plugin-svelte';
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
   plugins: [pluginSvelte()],
+  html: {
+    // title: "stickynode",
+    template: "./public/index.html",
+  },
 });
