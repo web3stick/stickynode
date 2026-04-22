@@ -18,6 +18,197 @@ npm install -g ajv-cli
 ajv validate -s config.schema.json -d config.json --spec=draft7
 ```
 
+---
+
+
+## Config Field Reference
+
+### Top Level Fields
+
+| Field | Description |
+|-------|-------------|
+| `max_loaded_contracts` | Max number of contracts cached in memory (default: 32) |
+| `genesis_file` | Path to genesis.json (default: "genesis.json") |
+| `genesis_records_file` | Path to genesis records file (default: null) |
+| `validator_key_file` | Path to validator key file (default: "validator_key.json") |
+| `node_key_file` | Path to node key file (default: "node_key.json") |
+| `tracked_shards_config` | Which shards to track (RPC default: "AllShards", Validator default: "NoShards") |
+| `log_summary_style` | Log output format: "colored" or "json" (default: "colored") |
+| `enable_multiline_logging` | Enable multi-line log formatting (default: false) |
+| `gc_blocks_limit` | Garbage collection block limit (default: 2) |
+| `gc_fork_clean_step` | Garbage collection fork clean step (default: 100) |
+| `gc_num_epochs_to_keep` | Number of epochs to keep for garbage collection (default: 5) |
+| `view_client_threads` | Number of view client threads (default: 4) |
+| `state_sync_enabled` | Enable state sync (default: true) |
+| `transaction_pool_size_limit` | Transaction pool size limit (default: 100000000) |
+
+### Duration Fields
+
+Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 10 seconds).
+
+| Field | Description |
+|-------|-------------|
+| `log_summary_period` | Log summary reporting interval (default: `{"secs": 10, "nanos": 0}`) |
+| `state_request_throttle_period` | State request throttle period (default: `{"secs": 30, "nanos": 0}`) |
+| `gc_step_period` | Garbage collection step period (default: `{"secs": 0, "nanos": 500000000}`) |
+
+### RPC Section (`rpc`)
+
+| Field | Description |
+|-------|-------------|
+| `addr` | RPC server listen address (default: "0.0.0.0:3030") |
+| `prometheus_addr` | Prometheus metrics address (default: null) |
+| `cors_allowed_origins` | Allowed CORS origins (default: `["*"]`) |
+| `enable_debug_rpc` | Enable debug RPC endpoints (default: false) |
+| `experimental_debug_pages_src_path` | Path to debug pages source (default: null) |
+
+**`polling_config`**
+
+| Field | Description |
+|-------|-------------|
+| `polling_interval` | Polling interval (default: `{"secs": 0, "nanos": 200000000}` / 200ms) |
+| `polling_timeout` | Polling timeout (default: `{"secs": 10, "nanos": 0}`) |
+
+**`limits_config`**
+
+| Field | Description |
+|-------|-------------|
+| `json_payload_max_size` | Max JSON payload size (default: 10485760 / 10MB) |
+
+### Telemetry Section (`telemetry`)
+
+| Field | Description |
+|-------|-------------|
+| `endpoints` | Telemetry reporting endpoints (default: `["https://telemetry.nearone.org/nodes"]`) |
+| `reporting_interval` | Telemetry reporting interval (default: `{"secs": 10, "nanos": 0}`) |
+
+### Network Section (`network`)
+
+| Field | Description |
+|-------|-------------|
+| `addr` | P2P network listen address (default: "0.0.0.0:24567") |
+| `boot_nodes` | Comma-separated boot nodes format `ed25519:key@ip:port` (default: "") |
+| `whitelist_nodes` | Whitelisted nodes (default: "") |
+| `max_num_peers` | Maximum number of peers (default: 40) |
+| `minimum_outbound_peers` | Minimum outbound peer count (default: 5) |
+| `ideal_connections_lo` | Ideal connections lower bound (default: 30) |
+| `ideal_connections_hi` | Ideal connections upper bound (default: 35) |
+| `peer_recent_time_window` | Peer recent time window (default: `{"secs": 600, "nanos": 0}` / 10min) |
+| `safe_set_size` | Safe set size for archival nodes (default: 20) |
+| `archival_peer_connections_lower_bound` | Lower bound for archival peer connections (default: 10) |
+| `handshake_timeout` | Handshake timeout (default: `{"secs": 20, "nanos": 0}`) |
+| `skip_sync_wait` | Skip sync wait on startup (default: false) |
+| `ban_window` | Ban window (default: `{"secs": 10800, "nanos": 0}` / 3 hours) |
+| `blacklist` | Blacklisted peers (default: `[]`) |
+| `ttl_account_id_router` | TTL for account ID router (default: `{"secs": 3600, "nanos": 0}` / 1 hour) |
+| `peer_stats_period` | Peer stats reporting period (default: `{"secs": 5, "nanos": 0}`) |
+| `monitor_peers_max_period` | Monitor peers max period (default: `{"secs": 60, "nanos": 0}`) |
+| `peer_states_cache_size` | Peer states cache size (default: 1000) |
+| `peer_expiration_duration` | Peer expiration (default: `{"secs": 604800, "nanos": 0}` / 7 days) |
+| `public_addrs` | Public addresses (default: `[]`) |
+| `allow_private_ip_in_public_addrs` | Allow private IPs in public addresses (default: false) |
+| `trusted_stun_servers` | STUN servers for NAT traversal (default: `["stun.l.google.com:19302", ...]`) |
+
+**`network.experimental`**
+
+| Field | Description |
+|-------|-------------|
+| `inbound_disabled` | Disable inbound connections (default: false) |
+| `connect_only_to_boot_nodes` | Only connect to boot nodes (default: false) |
+| `skip_sending_tombstones_seconds` | Skip sending tombstones (default: 0) |
+
+### Consensus Section (`consensus`)
+
+| Field | Description |
+|-------|-------------|
+| `min_num_peers` | Minimum peers required for block production (default: 3) |
+| `block_production_tracking_delay` | Block production tracking delay (default: `{"secs": 0, "nanos": 100000000}` / 100ms) |
+| `min_block_production_delay` | Min block production delay (default: `{"secs": 0, "nanos": 600000000}` / 600ms) |
+| `max_block_production_delay` | Max block production delay (default: `{"secs": 1, "nanos": 1800000000}` / 1.8s) |
+| `max_block_wait_delay` | Max block wait delay (default: `{"secs": 6, "nanos": 0}`) |
+| `produce_empty_blocks` | Produce empty blocks (default: true) |
+| `block_fetch_horizon` | Block fetch horizon (default: 50) |
+| `block_header_fetch_horizon` | Block header fetch horizon (default: 50) |
+| `catchup_step_period` | Catchup step period (default: `{"secs": 0, "nanos": 100000000}`) |
+| `chunk_request_retry_period` | Chunk request retry period (default: `{"secs": 0, "nanos": 400000000}`) |
+| `header_sync_initial_timeout` | Header sync initial timeout (default: `{"secs": 10, "nanos": 0}`) |
+| `header_sync_progress_timeout` | Header sync progress timeout (default: `{"secs": 2, "nanos": 0}`) |
+| `header_sync_stall_ban_timeout` | Header sync stall ban timeout (default: `{"secs": 120, "nanos": 0}`) |
+| `header_sync_expected_height_per_second` | Expected header sync height per second (default: 10) |
+| `sync_check_period` | Sync check period (default: `{"secs": 10, "nanos": 0}`) |
+| `sync_step_period` | Sync step period (default: `{"secs": 0, "nanos": 10000000}` / 10ms) |
+| `doomslug_step_period` | Doomslug step period (default: `{"secs": 0, "nanos": 100000000}`) |
+| `sync_height_threshold` | Sync height threshold (default: 1) |
+| `chunk_wait_mult` | Chunk wait multiplier (default: `[1, 3]`) |
+
+### Store Section (`store`)
+
+| Field | Description |
+|-------|-------------|
+| `path` | Path to RocksDB storage (default: null) |
+| `enable_statistics` | Enable RocksDB statistics (default: false) |
+| `enable_statistics_export` | Enable statistics export (default: true) |
+| `max_open_files` | Max open files (default: 10000) |
+| `col_state_cache_size` | Column state cache size (default: 3221225472 / 3GB) |
+| `col_flat_state_cache_size` | Flat state cache size (default: 134217728 / 128MB) |
+| `block_size` | Block size (default: 16384) |
+| `enable_receipt_prefetching` | Enable receipt prefetching (default: true) |
+
+**`store.trie_cache`**
+
+| Field | Description |
+|-------|-------------|
+| `default_max_bytes` | Default trie cache max bytes (default: 500000000 / 500MB) |
+| `per_shard_max_bytes` | Per-shard cache limits (default: `{"s1.v1": 50000000, ...}`) |
+| `shard_cache_deletions_queue_capacity` | Shard cache deletions queue capacity (default: 100000) |
+
+**`store.view_trie_cache`**
+
+| Field | Description |
+|-------|-------------|
+| `default_max_bytes` | View trie cache max bytes (default: 50000000 / 50MB) |
+| `per_shard_max_bytes` | Per-shard view cache limits (default: `{}`) |
+| `shard_cache_deletions_queue_capacity` | View shard cache deletions queue capacity (default: 100000) |
+
+**`store.sweat_prefetch_receivers`** - `["token.sweat", "vfinal.token.sweat.testnet"]`
+
+**`store.sweat_prefetch_senders`** - `["oracle.sweat", "sweat_the_oracle.testnet"]`
+
+**`store.claim_sweat_prefetch_config`**
+```json
+[
+  {"receiver": "claim.sweat", "sender": "token.sweat", "method_name": "record_batch_for_hold"},
+  {"receiver": "claim.sweat", "sender": "", "method_name": "claim"}
+]
+```
+
+**`store.load_mem_tries_for_shards`** - `[]` (empty array)
+
+**`store.load_mem_tries_for_tracked_shards`** - RPC: `false`, Validator: `true`
+
+**`store.state_snapshot_config`**
+
+| Field | Description |
+|-------|-------------|
+| `state_snapshot_type` | Snapshot type: "Enabled", "GarbageCollect", "ForcedGarbageCollect", "Rollback", "NoSnapshot", or null (default: "Enabled") |
+
+### State Sync Section (`state_sync`)
+
+**`state_sync.sync.ExternalStorage`**
+
+| Field | Description |
+|-------|-------------|
+| `location.GCS.bucket` | GCS bucket for state parts (default: "state-parts") |
+| `num_concurrent_requests` | Concurrent requests (default: 25) |
+| `num_concurrent_requests_during_catchup` | Concurrent requests during catchup (default: 5) |
+
+### Key Differences: RPC vs Validator
+
+| Field | RPC Default | Validator Default |
+|-------|-------------|-------------------|
+| `tracked_shards_config` | "AllShards" | "NoShards" |
+| `load_mem_tries_for_tracked_shards` | false | true |
+
 <!-- ============================================ -->
 <!-- ============================================ -->
 
