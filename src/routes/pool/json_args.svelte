@@ -51,7 +51,7 @@
 	});
 
 const full_command = $derived(() => {
-		return `near transaction construct-transaction ${owner_id} receiver-id pool.near add-action function-call create_staking_pool json-args '${json_output()}' prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' skip network-config mainnet sign-with-legacy-keychain`;
+		return `near transaction construct-transaction ${owner_id} receiver-id pool.near add-action function-call create_staking_pool json-args '${json_output()}' prepaid-gas '100.0 Tgas' attached-deposit '4 NEAR' skip network-config mainnet sign-with-legacy-keychain`;
 	});
 
 	const highlighted_command = $derived(() => {
