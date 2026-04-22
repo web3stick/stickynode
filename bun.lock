@@ -5,19 +5,19 @@
     "": {
       "name": "stickynode",
       "dependencies": {
-        "@sleet-css/sticky-css": "^0.0.3",
+        "@sleet-css/sticky-css": "latest",
       },
       "devDependencies": {
-        "@sveltejs/adapter-auto": "^7.0.1",
-        "@sveltejs/kit": "^2.57.0",
-        "@sveltejs/vite-plugin-svelte": "^7.0.0",
-        "mdsvex": "^0.12.7",
-        "prettier": "^3.8.1",
-        "prettier-plugin-svelte": "^3.5.1",
-        "svelte": "^5.55.2",
-        "svelte-check": "^4.4.6",
-        "typescript": "^6.0.2",
-        "vite": "^8.0.7",
+        "@sveltejs/adapter-auto": "latest",
+        "@sveltejs/kit": "latest",
+        "@sveltejs/vite-plugin-svelte": "latest",
+        "mdsvex": "latest",
+        "prettier": "latest",
+        "prettier-plugin-svelte": "latest",
+        "svelte": "latest",
+        "svelte-check": "latest",
+        "typescript": "latest",
+        "vite": "latest",
       },
     },
   },
@@ -76,7 +76,7 @@
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.16", "", {}, "sha512-45+YtqxLYKDWQouLKCrpIZhke+nXxhsw+qAHVzHDVwttyBlHNBVs2K25rDXrZzhpTp9w1FlAlvweV1H++fdZoA=="],
 
-    "@sleet-css/sticky-css": ["@sleet-css/sticky-css@0.0.3", "", {}, "sha512-cJrPaKsFh3y5h6Ns3viKfg7tYL+4A668KYvw710uuP1zlHY8ngwTBM+uczwFeqqT+I/fXnR8tRgCdSwgvAfaSg=="],
+    "@sleet-css/sticky-css": ["@sleet-css/sticky-css@0.0.4", "", {}, "sha512-6SRuDXa6WFe73lhvBh8zN8li2uq+5vJ2P2/eTM1fDoBv2Vjv8QbF2BtP4Obx5bU5rcPYH6ZBzfEhHVSFDm5mXQ=="],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
