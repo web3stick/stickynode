@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "@sleet-css/sticky-css/main.css";
-	import "$lib/css/main.css"
+	import "$lib/css/main.css";
 	import favicon from "$lib/assets/favicon.svg";
 	import ROUTES from "$lib/ts/routes";
 	let { children } = $props();

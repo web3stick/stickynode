@@ -8,6 +8,8 @@
 
 ℹ️ this guide is based on [near-nodes.io/validator/docker-setup](https://near-nodes.io/validator/docker-setup), and focused primarly on mainnet
 
+---
+
 setup
 ```sh
 # For mainnet
@@ -19,6 +21,43 @@ NODE_TYPE=validator  # or rpc
 
 mkdir -p ~/.near
 docker run --rm -v $HOME/.near:/root/.near nearprotocol/nearcore:$CHAIN_ID neard init --chain-id $CHAIN_ID --download-genesis --download-config $NODE_TYPE
+```
+
+👀 set this up to sync before running [near-nodes.io/intro/node-epoch-sync](https://near-nodes.io/intro/node-epoch-sync)
+
+---
+
+run
+```sh
+docker run -d \
+  --name neard \
+  -v $HOME/.near:/root/.near \
+  -p 3030:3030 \
+  -p 24567:24567 \
+  nearprotocol/nearcore:mainnet neard run
+```
+
+update
+```sh
+docker stop neard && docker rm neard
+docker pull nearprotocol/nearcore:mainnet
+docker run -d \
+  --name neard \
+  -v $HOME/.near:/root/.near \
+  -p 3030:3030 \
+  -p 24567:24567 \
+  nearprotocol/nearcore:mainnet neard run
+```
+
+other
+```sh
+docker logs -f neard
+docker start neard
+docker stop neard
+docker rm neard
+
+# check how much space it is taking
+du -sh ~/.near
 ```
 
 <!-- ============================================ -->
