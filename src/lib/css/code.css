@@ -1,4 +1,10 @@
-pre {
-    padding: 5px;
-    line-break: anywhere;
+pre.shiki {
+	overflow-x: auto;
+	white-space: pre-wrap;
+	word-break: break-word;
+	padding: 5px;
+}
+
+pre.shiki code {
+	display: block;
 }
