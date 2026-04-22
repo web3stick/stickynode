@@ -1,6 +1,6 @@
 import { createRouter } from "sv-router";
 // ===============================================
-import MD_HOME from "../md"
+import MD_HOME from "../md/README.md"
 // ===============================================
 export const ROUTES = {
   home: "/",
