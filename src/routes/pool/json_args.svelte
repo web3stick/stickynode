@@ -12,7 +12,7 @@
 	$effect(() => {
 		createHighlighter({
 			themes: ["catppuccin-mocha"],
-			langs: ["json"]
+			langs: ["json", "bash"]
 		}).then((h) => {
 			highlighter = h;
 		});
@@ -49,6 +49,18 @@
 			theme: "catppuccin-mocha"
 		});
 	});
+
+const full_command = $derived(() => {
+		return `near transaction construct-transaction ${owner_id} receiver-id pool.near add-action function-call create_staking_pool json-args '${json_output()}' prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' skip network-config mainnet sign-with-legacy-keychain`;
+	});
+
+	const highlighted_command = $derived(() => {
+		if (!highlighter) return escapeHtml(full_command());
+		return highlighter.codeToHtml(full_command(), {
+			lang: "bash",
+			theme: "catppuccin-mocha"
+		});
+	});
 	// ============================================
 	function percentage_to_fraction(percentage: number) {
 		return {
@@ -66,6 +78,14 @@
 			await navigator.clipboard.writeText(json_output());
 		} catch (err) {
 			console.error("Failed to copy:", err);
+		}
+	}
+
+	async function copy_command() {
+		try {
+			await navigator.clipboard.writeText(full_command());
+		} catch (err) {
+			console.error("Failed to copy command:", err);
 		}
 	}
 </script>
@@ -88,6 +108,10 @@
 	<input type="number" bind:value={reward_fee_fraction} />
 	<button onclick={copy_to_clipboard}>COPY</button>
 	<div>{@html highlighted_json()}</div>
+	<!-- <br /> -->
+	<h3>full near cli command</h3>
+	<div>{@html highlighted_command()}</div>
+	<button onclick={copy_command}>COPY FULL CLI COMMAND</button>
 </div>
 
 <!-- ============================================ -->
