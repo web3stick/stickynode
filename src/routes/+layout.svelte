@@ -1,5 +1,7 @@
 <script lang="ts">
+	import "@sleet-css/sticky-css/main.css";
 	import favicon from "$lib/assets/favicon.svg";
+	import ROUTES from "$lib/ts/routes";
 	let { children } = $props();
 </script>
 
@@ -13,4 +15,29 @@
 
 <!-- ============================================ -->
 <!-- ============================================ -->
-{@render children()}
+
+<section>
+	<div>
+		{@render children()}
+		<p>
+			================================
+			<br />
+			<a href={ROUTES.docker.path}>DOCKER</a>
+			<br />
+			<a href={ROUTES.config.path}>CONFIG</a>
+			<br />
+			copyright 2026 by web3stick.near
+		</p>
+	</div>
+</section>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<style>
+	div {
+		width: 500px;
+		max-width: 90vw;
+		text-align: left;
+	}
+</style>
