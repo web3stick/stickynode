@@ -12,7 +12,7 @@
 <svelte:head>
 	<title>stickynode</title>
 	<link rel="icon" href={favicon} />
-	<base target="_blank">
+	<base target="_blank" />
 </svelte:head>
 
 <!-- ============================================ -->
