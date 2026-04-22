@@ -1,19 +1,58 @@
 import { mdsvex } from "mdsvex";
 import adapter from "@sveltejs/adapter-auto";
+import { createHighlighter } from "shiki";
+import { transformerMetaHighlight } from "@shikijs/transformers";
+
+const theme = "catppuccin-mocha";
+const highlighter = await createHighlighter({
+	themes: [theme],
+	langs: [
+		"css",
+		"gdscript",
+		"go",
+		"hcl",
+		"html",
+		"java",
+		"javascript",
+		"json",
+		"python",
+		"shellscript",
+		"toml",
+		"typescript",
+		"yaml"
+	]
+});
+
+function escapeSvelte(str) {
+	return str.replace(/`/g, "&#96;").replace(/\{/g, "&#123;").replace(/\}/g, "&#125;");
+}
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	compilerOptions: {
-		// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
 		runes: ({ filename }) => (filename.split(/[/\\]/).includes("node_modules") ? undefined : true)
 	},
 	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter()
 	},
-	preprocess: [mdsvex({ extensions: [".svx", ".md"] })],
+	preprocess: [
+		mdsvex({
+			extensions: [".svx", ".md"],
+			highlight: {
+				highlighter: async (code, lang, meta) => {
+					const html = escapeSvelte(
+						highlighter.codeToHtml(code, {
+							lang,
+							theme,
+							transformers: [transformerMetaHighlight()],
+							meta: { __raw: meta }
+						})
+					);
+					return `{@html \`${html}\` }`;
+				}
+			}
+		})
+	],
 	extensions: [".svelte", ".svx", ".md"]
 };
 
