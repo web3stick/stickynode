@@ -19,8 +19,7 @@ after you have ran the setup command and have the .near folder
 
 this quide assumes that you have near cli rs set up and that you are logged in and ready to go.
 
-**interactive route**, so you can just type `near` into the terminal and hit enter and then follow these steps
-steps
+**interactive route**, so you can just type `near` into the terminal and hit enter and then follow these steps:
 
 - transaction
   - construct-transaction
@@ -45,8 +44,11 @@ steps
 
 ---
 
-ℹ️ important make sure to update your "validator_key.json" file with your pool account id
-and also should have generated a keypair and used the public key when creating the pool.near account
+
+make sure to update your "validator_key.json" file with your pool account id
+and also you should have generated a keypair and used that public key when creating the pool.near account
+
+you are now ready to restart your near node for these chages to take effect!
 
 <!-- ============================================ -->
 <!-- ============================================ -->

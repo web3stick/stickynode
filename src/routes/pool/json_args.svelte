@@ -50,7 +50,7 @@
 		});
 	});
 
-const full_command = $derived(() => {
+	const full_command = $derived(() => {
 		return `near transaction construct-transaction ${owner_id} receiver-id pool.near add-action function-call create_staking_pool json-args '${json_output()}' prepaid-gas '100.0 Tgas' attached-deposit '4 NEAR' skip network-config mainnet sign-with-legacy-keychain`;
 	});
 
@@ -109,7 +109,8 @@ const full_command = $derived(() => {
 	<input type="text" bind:value={code_hash} />
 	staking_pool_id:
 	<input type="text" bind:value={staking_pool_id} />
-	stake_public_key:
+	stake_public_key: (generate new key pair for this if you don't have one, then update your “validator_key.json”
+	file)
 	<input type="text" bind:value={stake_public_key} />
 	reward_fee_fraction: (percentage of the pool's rewards that go to you)
 	<input type="number" bind:value={reward_fee_fraction} />
