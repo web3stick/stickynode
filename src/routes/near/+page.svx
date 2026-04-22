@@ -1,4 +1,6 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import ROUTES from "../../lib/ts/routes"
+</script>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
@@ -50,6 +52,8 @@ the config.json file, see [near-nodes.io/validator/compile-and-run-a-node#31-set
 - [Regular RPC Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/rpc/config.json) stores recent info for all the shards, and can serve RPC queries for the last N epochs (N=5 by default).
 - [Archival RPC Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/archival/config.json) stores all the info starting for genesis, can serve RPC queries for the entire history. Requires significant storage.
 - [Validator Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/validator/config.json) is designed for the validators. Heavily optimized, does not store the full state, and cannot serve RPC queries.
+
+see [config.md]({ROUTES.config.path}), for json schema for config.json
 
 <!-- ============================================ -->
 <!-- ============================================ -->
