@@ -1,0 +1,17 @@
+<script lang="ts"></script>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+# pool
+🟨 setting up your staking .pool.near account
+
+ℹ️ if you do plan on runing a validator you can set up your pool account before starting nearcore, after you have ran the setup command and have the .near folder
+
+
+
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<style></style>

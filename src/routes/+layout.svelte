@@ -24,7 +24,9 @@
 		<p>
 			================================
 			<br />
-			<a href={ROUTES.docker.path}>DOCKER</a>
+			<a href={ROUTES.docker.path}>{ROUTES.docker.label}</a>
+			<br />
+			<a href={ROUTES.pool.path}>{ROUTES.pool.label}</a>
 			<br />
 			<a href={ROUTES.near.path}>{ROUTES.near.label}</a>
 			<br />

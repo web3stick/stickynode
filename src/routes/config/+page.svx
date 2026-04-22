@@ -7,6 +7,8 @@
 
 🟨 json schema for `config.json`
 
+ℹ️ this is an extra unnecessary thing, just for fun or more info
+
 see [config.schema.json](./json/config.schema.json) for schema
 
 
