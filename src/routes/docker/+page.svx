@@ -8,6 +8,19 @@
 
 ℹ️ this guide is based on [near-nodes.io/validator/docker-setup](https://near-nodes.io/validator/docker-setup), and focused primarly on mainnet
 
+setup
+```sh
+# For mainnet
+docker pull nearprotocol/nearcore:mainnet
+
+# Initializing the Node
+CHAIN_ID=mainnet
+NODE_TYPE=validator  # or rpc
+
+mkdir -p ~/.near
+docker run --rm -v $HOME/.near:/root/.near nearprotocol/nearcore:$CHAIN_ID neard init --chain-id $CHAIN_ID --download-genesis --download-config $NODE_TYPE
+```
+
 <!-- ============================================ -->
 <!-- ============================================ -->
 
