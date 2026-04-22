@@ -30,7 +30,7 @@ genesis block
 
 ##### \*\_key.json
 
-both of the `_key.json` files have the same structure, the "node_key.json" is generated automactily and does not need to be touched, for the "validator_key.json" file you must generate a new key pair and have the account id for your staking .pool.near account
+both of the `_key.json` files have the same structure, the "node_key.json" is generated automatically and does not need to be touched, for the "validator_key.json" file you must generate a new key pair and have the account id for your staking .pool.near account
 
 ```json
 {

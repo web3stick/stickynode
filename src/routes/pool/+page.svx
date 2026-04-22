@@ -9,7 +9,7 @@
 
 🟨 setting up your staking .pool.near account
 
-ℹ️ if you do plan on runing a validator you can
+ℹ️ if you do plan on running a validator you can
 set up your pool account before starting nearcore,
 after you have ran the setup command and have the .near folder
 
@@ -17,7 +17,7 @@ after you have ran the setup command and have the .near folder
 
 ---
 
-this quide assumes that you have near cli rs set up and that you are logged in and ready to go.
+this guide assumes that you have near cli set up and that you are logged in and ready to go.
 
 **interactive route**, so you can just type `near` into the terminal and hit enter and then follow these steps:
 
@@ -48,7 +48,7 @@ this quide assumes that you have near cli rs set up and that you are logged in a
 make sure to update your "validator_key.json" file with your pool account id
 and also you should have generated a keypair and used that public key when creating the pool.near account
 
-you are now ready to restart your near node for these chages to take effect!
+you are now ready to restart your near node for these changes to take effect!
 
 <!-- ============================================ -->
 <!-- ============================================ -->

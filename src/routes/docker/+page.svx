@@ -7,7 +7,7 @@
 
 🟨 running neard with docker
 
-ℹ️ this guide is based on [near-nodes.io/validator/docker-setup](https://near-nodes.io/validator/docker-setup), and focused primarly on mainnet
+ℹ️ this guide is based on [near-nodes.io/validator/docker-setup](https://near-nodes.io/validator/docker-setup), and focused primarily on mainnet
 
 ---
 
