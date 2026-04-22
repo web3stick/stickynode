@@ -23,7 +23,7 @@ ajv validate -s static/json/config.schema.json -d static/json/config.validator.j
 
 Or validate all at once:
 ```bash
-ajv validate -s static/json/config.schema.json -d "static/json/config.*.json" --spec=draft7
+ajv validate -s static/json/config.schema.json -d static/json/config.rpc.json -d static/json/config.validator.json --spec=draft7
 ```
 
 ---
