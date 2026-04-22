@@ -7,7 +7,16 @@
 
 🟨 json schema for `config.json`
 
+see [config.schema.json](./json/config.schema.json) for schema
 
+
+validate your config file:
+```bash
+# install ajv-cli
+npm install -g ajv-cli
+# download and save the schema in your .near folder then
+ajv validate -s config.schema.json -d config.json --spec=draft7
+```
 
 <!-- ============================================ -->
 <!-- ============================================ -->
