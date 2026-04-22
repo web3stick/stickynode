@@ -1,4 +1,6 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import DIV_JSON_ARGS from "./json_args.svelte"
+</script>
 
 <!-- ============================================ -->
 <!-- ============================================ -->
@@ -7,7 +9,44 @@
 
 🟨 setting up your staking .pool.near account
 
-ℹ️ if you do plan on runing a validator you can set up your pool account before starting nearcore, after you have ran the setup command and have the .near folder
+ℹ️ if you do plan on runing a validator you can
+set up your pool account before starting nearcore,
+after you have ran the setup command and have the .near folder
+
+ℹ️ this page is a simpler version of [near-nodes.io/validator/deploy-on-mainnet](https://near-nodes.io/validator/deploy-on-mainnet)
+
+---
+
+this quide assumes that you have near cli rs set up and that you are logged in and ready to go.
+
+**interactive route**, so you can just type `near` into the terminal and hit enter and then follow these steps
+steps
+
+- transaction
+  - construct-transaction
+    - sender account ID (your .near account address)
+    - receiver account ID (pool.near)
+    - add-action
+    - function-call
+    - create_staking_pool (function name)
+    - json-args (see arg builder below)
+    - gas (300 Tgas)
+    - deposit (4 NEAR)
+    - Skip adding a new action
+    - mainnet
+    - sign
+    - send
+
+---
+
+<!-- ARG BUILDER -->
+
+<DIV_JSON_ARGS/>
+
+---
+
+ℹ️ important make sure to update your "validator_key.json" file with your pool account id
+and also should have generated a keypair and used the public key when creating the pool.near account
 
 <!-- ============================================ -->
 <!-- ============================================ -->
