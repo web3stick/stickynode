@@ -73,9 +73,14 @@ const full_command = $derived(() => {
 		return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 	}
 	// ============================================
+	let json_copied = $state(false);
+	let command_copied = $state(false);
+
 	async function copy_to_clipboard() {
 		try {
 			await navigator.clipboard.writeText(json_output());
+			json_copied = true;
+			setTimeout(() => (json_copied = false), 2000);
 		} catch (err) {
 			console.error("Failed to copy:", err);
 		}
@@ -84,6 +89,8 @@ const full_command = $derived(() => {
 	async function copy_command() {
 		try {
 			await navigator.clipboard.writeText(full_command());
+			command_copied = true;
+			setTimeout(() => (command_copied = false), 2000);
 		} catch (err) {
 			console.error("Failed to copy command:", err);
 		}
@@ -106,12 +113,11 @@ const full_command = $derived(() => {
 	<input type="text" bind:value={stake_public_key} />
 	reward_fee_fraction: (percentage of the pool's rewards that go to you)
 	<input type="number" bind:value={reward_fee_fraction} />
-	<button onclick={copy_to_clipboard}>COPY</button>
+	<button onclick={copy_to_clipboard}>{json_copied ? "COPIED" : "COPY JSON"}</button>
 	<div>{@html highlighted_json()}</div>
-	<!-- <br /> -->
 	<h3>full near cli command</h3>
 	<div>{@html highlighted_command()}</div>
-	<button onclick={copy_command}>COPY FULL CLI COMMAND</button>
+	<button onclick={copy_command}>{command_copied ? "COPIED" : "COPY FULL CLI COMMAND"}</button>
 </div>
 
 <!-- ============================================ -->
