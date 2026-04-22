@@ -1,6 +1,9 @@
 <script lang="ts">
-	let owner_id = $state("pool.sleet.near");
+	let owner_id = $state("your_account.near");
 	let code_hash = $state("AjD4YJaXgpiRdiArqnzyDi7Bkr1gJms9Z2w7Ev5esTKB");
+	let staking_pool_id = $state("anythingnottken");
+	let stake_public_key = $state("ed25519:pub_key_here");
+	let reward_fee_fraction = $state(7);
 </script>
 
 <!-- ============================================ -->
@@ -13,6 +16,16 @@
 	<input type="text" bind:value={owner_id} />
 	code_hash: (only change this if you know what you are doing)
 	<input type="text" bind:value={code_hash} />
+	staking_pool_id:
+	<input type="text" bind:value={staking_pool_id} />
+	stake_public_key:
+	<input type="text" bind:value={stake_public_key} />
+	reward_fee_fraction: (percentage of the pool's rewards that go to you)
+	<input type="number" bind:value={reward_fee_fraction} />
+	<button>COPY</button>
+	<pre>
+	<code></code>
+	</pre>
 </div>
 
 <!-- ============================================ -->
@@ -22,5 +35,13 @@
 	input {
 		width: 100%;
 		font-size: 20px;
+		box-sizing: border-box;
+	}
+	button {
+	width: 100%;
+	margin: 0px;
+	margin-top: 3px;
+	box-sizing: border-box;
+	border-radius: 1px;
 	}
 </style>
