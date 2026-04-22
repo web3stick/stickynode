@@ -1,0 +1,57 @@
+<script lang="ts"></script>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+# ~/.near
+
+🟨 .near folder
+
+---
+
+### ~/.near
+
+the .near folder
+
+```sh
+~/.near/
+├── config.json
+├── genesis.json
+├── node_key.json
+├── validator_key.json
+└── data/
+```
+
+##### genesis.json
+
+genesis block
+
+##### \*\_key.json
+
+both of the `_key.json` files have the same structure, the "node_key.json" is generated automactily and does not need to be touched, for the "validator_key.json" file you must generate a new key pair and have the account id for your staking .pool.near account
+
+```json
+{
+	"account_id": "your.pool.near",
+	"public_key": "ed25519:public_key",
+	"secret_key": "ed25519:secret_key"
+}
+```
+
+##### data/
+
+data folder
+
+
+##### config.json
+
+the config.json file, see [near-nodes.io/validator/compile-and-run-a-node#31-set-up-the-config-file-for-your-needs-1](https://near-nodes.io/validator/compile-and-run-a-node#31-set-up-the-config-file-for-your-needs-1)
+
+- [Regular RPC Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/rpc/config.json) stores recent info for all the shards, and can serve RPC queries for the last N epochs (N=5 by default).
+- [Archival RPC Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/archival/config.json) stores all the info starting for genesis, can serve RPC queries for the entire history. Requires significant storage.
+- [Validator Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/validator/config.json) is designed for the validators. Heavily optimized, does not store the full state, and cannot serve RPC queries.
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<style></style>

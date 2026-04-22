@@ -23,7 +23,7 @@ mkdir -p ~/.near
 docker run --rm -v $HOME/.near:/root/.near nearprotocol/nearcore:$CHAIN_ID neard init --chain-id $CHAIN_ID --download-genesis --download-config $NODE_TYPE
 ```
 
-👀 set this up to sync before running [near-nodes.io/intro/node-epoch-sync](https://near-nodes.io/intro/node-epoch-sync)
+👀 set NEAR boot nodes up to sync [near-nodes.io/intro/node-epoch-sync](https://near-nodes.io/intro/node-epoch-sync)
 
 ---
 

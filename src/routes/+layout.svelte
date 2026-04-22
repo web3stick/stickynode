@@ -12,6 +12,7 @@
 <svelte:head>
 	<title>stickynode</title>
 	<link rel="icon" href={favicon} />
+	<base target="_blank">
 </svelte:head>
 
 <!-- ============================================ -->
@@ -25,7 +26,9 @@
 			<br />
 			<a href={ROUTES.docker.path}>DOCKER</a>
 			<br />
-			<a href={ROUTES.config.path}>CONFIG</a>
+			<a href={ROUTES.near.path}>{ROUTES.near.label}</a>
+			<br />
+			<a href={ROUTES.config.path}>{ROUTES.config.label}</a>
 			<br />
 			copyright 2026 by web3stick.near
 		</p>
