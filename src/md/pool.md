@@ -1,2 +1,0 @@
-# POOL
-🟨 pool set up

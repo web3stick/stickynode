@@ -1,2 +1,0 @@
-<!--MD_HOME-->
-# stickynode
