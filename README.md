@@ -11,9 +11,8 @@ bun i
 bun run dev
 bun run build
 bun run check
-
+bun run format
 bun run tsc --noEmit
-bunx prettier . --write
 
 # netlify
 # stickyweb-stickynode
