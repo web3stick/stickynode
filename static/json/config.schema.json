@@ -1,317 +1,320 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "NEAR Node Config",
-  "description": "Configuration schema for NEAR RPC and Validator nodes",
-  "type": "object",
-  "properties": {
-    "max_loaded_contracts": {
-      "type": "integer",
-      "default": 32
-    },
-    "genesis_file": {
-      "type": "string",
-      "default": "genesis.json"
-    },
-    "genesis_records_file": {
-      "oneOf": [
-        { "type": "string" },
-        { "type": "null" }
-      ],
-      "default": null
-    },
-    "validator_key_file": {
-      "type": "string",
-      "default": "validator_key.json"
-    },
-    "node_key_file": {
-      "type": "string",
-      "default": "node_key.json"
-    },
-    "rpc": {
-      "type": "object",
-      "properties": {
-        "addr": {
-          "type": "string",
-          "default": "0.0.0.0:3030"
-        },
-        "prometheus_addr": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "null" }
-          ]
-        },
-        "cors_allowed_origins": {
-          "type": "array",
-          "items": { "type": "string" },
-          "default": ["*"]
-        },
-        "polling_config": {
-          "type": "object",
-          "properties": {
-            "polling_interval": { "$ref": "#/definitions/Duration" },
-            "polling_timeout": { "$ref": "#/definitions/Duration" }
-          },
-          "required": ["polling_interval", "polling_timeout"]
-        },
-        "limits_config": {
-          "type": "object",
-          "properties": {
-            "json_payload_max_size": {
-              "type": "integer",
-              "default": 10485760
-            }
-          }
-        },
-        "enable_debug_rpc": {
-          "type": "boolean",
-          "default": false
-        },
-        "experimental_debug_pages_src_path": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "null" }
-          ]
-        }
-      },
-      "required": ["addr", "cors_allowed_origins", "polling_config", "limits_config", "enable_debug_rpc"]
-    },
-    "telemetry": {
-      "type": "object",
-      "properties": {
-        "endpoints": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "reporting_interval": { "$ref": "#/definitions/Duration" }
-      },
-      "required": ["endpoints", "reporting_interval"]
-    },
-    "network": {
-      "type": "object",
-      "properties": {
-        "addr": { "type": "string" },
-        "boot_nodes": { "type": "string" },
-        "whitelist_nodes": { "type": "string" },
-        "max_num_peers": { "type": "integer", "default": 40 },
-        "minimum_outbound_peers": { "type": "integer", "default": 5 },
-        "ideal_connections_lo": { "type": "integer", "default": 30 },
-        "ideal_connections_hi": { "type": "integer", "default": 35 },
-        "peer_recent_time_window": { "$ref": "#/definitions/Duration" },
-        "safe_set_size": { "type": "integer", "default": 20 },
-        "archival_peer_connections_lower_bound": { "type": "integer", "default": 10 },
-        "handshake_timeout": { "$ref": "#/definitions/Duration" },
-        "skip_sync_wait": { "type": "boolean", "default": false },
-        "ban_window": { "$ref": "#/definitions/Duration" },
-        "blacklist": { "type": "array", "default": [] },
-        "ttl_account_id_router": { "$ref": "#/definitions/Duration" },
-        "peer_stats_period": { "$ref": "#/definitions/Duration" },
-        "monitor_peers_max_period": { "$ref": "#/definitions/Duration" },
-        "peer_states_cache_size": { "type": "integer", "default": 1000 },
-        "peer_expiration_duration": { "$ref": "#/definitions/Duration" },
-        "public_addrs": { "type": "array", "default": [] },
-        "allow_private_ip_in_public_addrs": { "type": "boolean", "default": false },
-        "trusted_stun_servers": {
-          "type": "array",
-          "items": { "type": "string" },
-          "default": [
-            "stun.l.google.com:19302",
-            "stun1.l.google.com:19302",
-            "stun2.l.google.com:19302",
-            "stun3.l.google.com:19302",
-            "stun4.l.google.com:19302"
-          ]
-        },
-        "experimental": {
-          "type": "object",
-          "properties": {
-            "inbound_disabled": { "type": "boolean", "default": false },
-            "connect_only_to_boot_nodes": { "type": "boolean", "default": false },
-            "skip_sending_tombstones_seconds": { "type": "integer", "default": 0 }
-          }
-        }
-      },
-      "required": ["addr", "boot_nodes", "whitelist_nodes"]
-    },
-    "consensus": {
-      "type": "object",
-      "properties": {
-        "min_num_peers": { "type": "integer", "default": 3 },
-        "block_production_tracking_delay": { "$ref": "#/definitions/Duration" },
-        "min_block_production_delay": { "$ref": "#/definitions/Duration" },
-        "max_block_production_delay": { "$ref": "#/definitions/Duration" },
-        "max_block_wait_delay": { "$ref": "#/definitions/Duration" },
-        "produce_empty_blocks": { "type": "boolean", "default": true },
-        "block_fetch_horizon": { "type": "integer", "default": 50 },
-        "block_header_fetch_horizon": { "type": "integer", "default": 50 },
-        "catchup_step_period": { "$ref": "#/definitions/Duration" },
-        "chunk_request_retry_period": { "$ref": "#/definitions/Duration" },
-        "header_sync_initial_timeout": { "$ref": "#/definitions/Duration" },
-        "header_sync_progress_timeout": { "$ref": "#/definitions/Duration" },
-        "header_sync_stall_ban_timeout": { "$ref": "#/definitions/Duration" },
-        "header_sync_expected_height_per_second": { "type": "integer", "default": 10 },
-        "sync_check_period": { "$ref": "#/definitions/Duration" },
-        "sync_step_period": { "$ref": "#/definitions/Duration" },
-        "doomslug_step_period": { "$ref": "#/definitions/Duration" },
-        "sync_height_threshold": { "type": "integer", "default": 1 },
-        "chunk_wait_mult": {
-          "type": "array",
-          "items": { "type": "integer" },
-          "default": [1, 3]
-        }
-      },
-      "required": ["min_num_peers"]
-    },
-    "tracked_shards_config": {
-      "oneOf": [
-        { "type": "string", "enum": ["AllShards", "NoShards"] },
-        { "type": "array", "items": { "type": "integer" } }
-      ]
-    },
-    "log_summary_style": {
-      "type": "string",
-      "enum": ["colored", "json"],
-      "default": "colored"
-    },
-    "log_summary_period": { "$ref": "#/definitions/Duration" },
-    "enable_multiline_logging": { "type": "boolean", "default": false },
-    "gc_blocks_limit": { "type": "integer", "default": 2 },
-    "gc_fork_clean_step": { "type": "integer", "default": 100 },
-    "gc_num_epochs_to_keep": { "type": "integer", "default": 5 },
-    "view_client_threads": { "type": "integer", "default": 4 },
-    "state_request_throttle_period": { "$ref": "#/definitions/Duration" },
-    "trie_viewer_state_size_limit": { "type": "integer", "default": 50000 },
-    "store": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "null" }
-          ]
-        },
-        "enable_statistics": { "type": "boolean", "default": false },
-        "enable_statistics_export": { "type": "boolean", "default": true },
-        "max_open_files": { "type": "integer", "default": 10000 },
-        "col_state_cache_size": { "type": "integer", "default": 3221225472 },
-        "col_flat_state_cache_size": { "type": "integer", "default": 134217728 },
-        "block_size": { "type": "integer", "default": 16384 },
-        "trie_cache": {
-          "type": "object",
-          "properties": {
-            "default_max_bytes": { "type": "integer", "default": 500000000 },
-            "per_shard_max_bytes": {
-              "type": "object",
-              "additionalProperties": { "type": "integer" },
-              "default": {}
-            },
-            "shard_cache_deletions_queue_capacity": { "type": "integer", "default": 100000 }
-          }
-        },
-        "view_trie_cache": {
-          "type": "object",
-          "properties": {
-            "default_max_bytes": { "type": "integer", "default": 50000000 },
-            "per_shard_max_bytes": {
-              "type": "object",
-              "additionalProperties": { "type": "integer" },
-              "default": {}
-            },
-            "shard_cache_deletions_queue_capacity": { "type": "integer", "default": 100000 }
-          }
-        },
-        "enable_receipt_prefetching": { "type": "boolean", "default": true },
-        "sweat_prefetch_receivers": {
-          "type": "array",
-          "items": { "type": "string" },
-          "default": ["token.sweat", "vfinal.token.sweat.testnet"]
-        },
-        "sweat_prefetch_senders": {
-          "type": "array",
-          "items": { "type": "string" },
-          "default": ["oracle.sweat", "sweat_the_oracle.testnet"]
-        },
-        "claim_sweat_prefetch_config": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "receiver": { "type": "string" },
-              "sender": { "type": "string" },
-              "method_name": { "type": "string" }
-            },
-            "required": ["receiver", "sender", "method_name"]
-          }
-        },
-        "load_mem_tries_for_shards": {
-          "type": "array",
-          "default": []
-        },
-        "load_mem_tries_for_tracked_shards": { "type": "boolean" },
-        "state_snapshot_config": {
-          "type": "object",
-          "properties": {
-            "state_snapshot_type": {
-              "oneOf": [
-                { "type": "string", "enum": ["Enabled", "GarbageCollect", "ForcedGarbageCollect", "Rollback", "NoSnapshot"] },
-                { "type": "null" }
-              ]
-            }
-          }
-        }
-      }
-    },
-    "state_sync_enabled": { "type": "boolean", "default": true },
-    "state_sync": {
-      "type": "object",
-      "properties": {
-        "sync": {
-          "type": "object",
-          "properties": {
-            "ExternalStorage": {
-              "type": "object",
-              "properties": {
-                "location": {
-                  "type": "object",
-                  "properties": {
-                    "GCS": {
-                      "type": "object",
-                      "properties": {
-                        "bucket": { "type": "string" }
-                      },
-                      "required": ["bucket"]
-                    }
-                  }
-                },
-                "num_concurrent_requests": { "type": "integer", "default": 25 },
-                "num_concurrent_requests_during_catchup": { "type": "integer", "default": 5 }
-              },
-              "required": ["location"]
-            }
-          }
-        }
-      }
-    },
-    "transaction_pool_size_limit": { "type": "integer", "default": 100000000 },
-    "gc_step_period": { "$ref": "#/definitions/Duration" }
-  },
-  "definitions": {
-    "Duration": {
-      "type": "object",
-      "properties": {
-        "secs": { "type": "integer", "default": 0 },
-        "nanos": { "type": "integer", "default": 0 }
-      },
-      "required": ["secs", "nanos"]
-    }
-  },
-  "required": [
-    "max_loaded_contracts",
-    "genesis_file",
-    "validator_key_file",
-    "node_key_file",
-    "rpc",
-    "telemetry",
-    "network",
-    "consensus"
-  ]
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "NEAR Node Config",
+	"description": "Configuration schema for NEAR RPC and Validator nodes",
+	"type": "object",
+	"properties": {
+		"max_loaded_contracts": {
+			"type": "integer",
+			"default": 32
+		},
+		"genesis_file": {
+			"type": "string",
+			"default": "genesis.json"
+		},
+		"genesis_records_file": {
+			"oneOf": [{ "type": "string" }, { "type": "null" }],
+			"default": null
+		},
+		"validator_key_file": {
+			"type": "string",
+			"default": "validator_key.json"
+		},
+		"node_key_file": {
+			"type": "string",
+			"default": "node_key.json"
+		},
+		"rpc": {
+			"type": "object",
+			"properties": {
+				"addr": {
+					"type": "string",
+					"default": "0.0.0.0:3030"
+				},
+				"prometheus_addr": {
+					"oneOf": [{ "type": "string" }, { "type": "null" }]
+				},
+				"cors_allowed_origins": {
+					"type": "array",
+					"items": { "type": "string" },
+					"default": ["*"]
+				},
+				"polling_config": {
+					"type": "object",
+					"properties": {
+						"polling_interval": { "$ref": "#/definitions/Duration" },
+						"polling_timeout": { "$ref": "#/definitions/Duration" }
+					},
+					"required": ["polling_interval", "polling_timeout"]
+				},
+				"limits_config": {
+					"type": "object",
+					"properties": {
+						"json_payload_max_size": {
+							"type": "integer",
+							"default": 10485760
+						}
+					}
+				},
+				"enable_debug_rpc": {
+					"type": "boolean",
+					"default": false
+				},
+				"experimental_debug_pages_src_path": {
+					"oneOf": [{ "type": "string" }, { "type": "null" }]
+				}
+			},
+			"required": [
+				"addr",
+				"cors_allowed_origins",
+				"polling_config",
+				"limits_config",
+				"enable_debug_rpc"
+			]
+		},
+		"telemetry": {
+			"type": "object",
+			"properties": {
+				"endpoints": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"reporting_interval": { "$ref": "#/definitions/Duration" }
+			},
+			"required": ["endpoints", "reporting_interval"]
+		},
+		"network": {
+			"type": "object",
+			"properties": {
+				"addr": { "type": "string" },
+				"boot_nodes": { "type": "string" },
+				"whitelist_nodes": { "type": "string" },
+				"max_num_peers": { "type": "integer", "default": 40 },
+				"minimum_outbound_peers": { "type": "integer", "default": 5 },
+				"ideal_connections_lo": { "type": "integer", "default": 30 },
+				"ideal_connections_hi": { "type": "integer", "default": 35 },
+				"peer_recent_time_window": { "$ref": "#/definitions/Duration" },
+				"safe_set_size": { "type": "integer", "default": 20 },
+				"archival_peer_connections_lower_bound": { "type": "integer", "default": 10 },
+				"handshake_timeout": { "$ref": "#/definitions/Duration" },
+				"skip_sync_wait": { "type": "boolean", "default": false },
+				"ban_window": { "$ref": "#/definitions/Duration" },
+				"blacklist": { "type": "array", "default": [] },
+				"ttl_account_id_router": { "$ref": "#/definitions/Duration" },
+				"peer_stats_period": { "$ref": "#/definitions/Duration" },
+				"monitor_peers_max_period": { "$ref": "#/definitions/Duration" },
+				"peer_states_cache_size": { "type": "integer", "default": 1000 },
+				"peer_expiration_duration": { "$ref": "#/definitions/Duration" },
+				"public_addrs": { "type": "array", "default": [] },
+				"allow_private_ip_in_public_addrs": { "type": "boolean", "default": false },
+				"trusted_stun_servers": {
+					"type": "array",
+					"items": { "type": "string" },
+					"default": [
+						"stun.l.google.com:19302",
+						"stun1.l.google.com:19302",
+						"stun2.l.google.com:19302",
+						"stun3.l.google.com:19302",
+						"stun4.l.google.com:19302"
+					]
+				},
+				"experimental": {
+					"type": "object",
+					"properties": {
+						"inbound_disabled": { "type": "boolean", "default": false },
+						"connect_only_to_boot_nodes": { "type": "boolean", "default": false },
+						"skip_sending_tombstones_seconds": { "type": "integer", "default": 0 }
+					}
+				}
+			},
+			"required": ["addr", "boot_nodes", "whitelist_nodes"]
+		},
+		"consensus": {
+			"type": "object",
+			"properties": {
+				"min_num_peers": { "type": "integer", "default": 3 },
+				"block_production_tracking_delay": { "$ref": "#/definitions/Duration" },
+				"min_block_production_delay": { "$ref": "#/definitions/Duration" },
+				"max_block_production_delay": { "$ref": "#/definitions/Duration" },
+				"max_block_wait_delay": { "$ref": "#/definitions/Duration" },
+				"produce_empty_blocks": { "type": "boolean", "default": true },
+				"block_fetch_horizon": { "type": "integer", "default": 50 },
+				"block_header_fetch_horizon": { "type": "integer", "default": 50 },
+				"catchup_step_period": { "$ref": "#/definitions/Duration" },
+				"chunk_request_retry_period": { "$ref": "#/definitions/Duration" },
+				"header_sync_initial_timeout": { "$ref": "#/definitions/Duration" },
+				"header_sync_progress_timeout": { "$ref": "#/definitions/Duration" },
+				"header_sync_stall_ban_timeout": { "$ref": "#/definitions/Duration" },
+				"header_sync_expected_height_per_second": { "type": "integer", "default": 10 },
+				"sync_check_period": { "$ref": "#/definitions/Duration" },
+				"sync_step_period": { "$ref": "#/definitions/Duration" },
+				"doomslug_step_period": { "$ref": "#/definitions/Duration" },
+				"sync_height_threshold": { "type": "integer", "default": 1 },
+				"chunk_wait_mult": {
+					"type": "array",
+					"items": { "type": "integer" },
+					"default": [1, 3]
+				}
+			},
+			"required": ["min_num_peers"]
+		},
+		"tracked_shards_config": {
+			"oneOf": [
+				{ "type": "string", "enum": ["AllShards", "NoShards"] },
+				{ "type": "array", "items": { "type": "integer" } }
+			]
+		},
+		"log_summary_style": {
+			"type": "string",
+			"enum": ["colored", "json"],
+			"default": "colored"
+		},
+		"log_summary_period": { "$ref": "#/definitions/Duration" },
+		"enable_multiline_logging": { "type": "boolean", "default": false },
+		"gc_blocks_limit": { "type": "integer", "default": 2 },
+		"gc_fork_clean_step": { "type": "integer", "default": 100 },
+		"gc_num_epochs_to_keep": { "type": "integer", "default": 5 },
+		"view_client_threads": { "type": "integer", "default": 4 },
+		"state_request_throttle_period": { "$ref": "#/definitions/Duration" },
+		"trie_viewer_state_size_limit": { "type": "integer", "default": 50000 },
+		"store": {
+			"type": "object",
+			"properties": {
+				"path": {
+					"oneOf": [{ "type": "string" }, { "type": "null" }]
+				},
+				"enable_statistics": { "type": "boolean", "default": false },
+				"enable_statistics_export": { "type": "boolean", "default": true },
+				"max_open_files": { "type": "integer", "default": 10000 },
+				"col_state_cache_size": { "type": "integer", "default": 3221225472 },
+				"col_flat_state_cache_size": { "type": "integer", "default": 134217728 },
+				"block_size": { "type": "integer", "default": 16384 },
+				"trie_cache": {
+					"type": "object",
+					"properties": {
+						"default_max_bytes": { "type": "integer", "default": 500000000 },
+						"per_shard_max_bytes": {
+							"type": "object",
+							"additionalProperties": { "type": "integer" },
+							"default": {}
+						},
+						"shard_cache_deletions_queue_capacity": { "type": "integer", "default": 100000 }
+					}
+				},
+				"view_trie_cache": {
+					"type": "object",
+					"properties": {
+						"default_max_bytes": { "type": "integer", "default": 50000000 },
+						"per_shard_max_bytes": {
+							"type": "object",
+							"additionalProperties": { "type": "integer" },
+							"default": {}
+						},
+						"shard_cache_deletions_queue_capacity": { "type": "integer", "default": 100000 }
+					}
+				},
+				"enable_receipt_prefetching": { "type": "boolean", "default": true },
+				"sweat_prefetch_receivers": {
+					"type": "array",
+					"items": { "type": "string" },
+					"default": ["token.sweat", "vfinal.token.sweat.testnet"]
+				},
+				"sweat_prefetch_senders": {
+					"type": "array",
+					"items": { "type": "string" },
+					"default": ["oracle.sweat", "sweat_the_oracle.testnet"]
+				},
+				"claim_sweat_prefetch_config": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"receiver": { "type": "string" },
+							"sender": { "type": "string" },
+							"method_name": { "type": "string" }
+						},
+						"required": ["receiver", "sender", "method_name"]
+					}
+				},
+				"load_mem_tries_for_shards": {
+					"type": "array",
+					"default": []
+				},
+				"load_mem_tries_for_tracked_shards": { "type": "boolean" },
+				"state_snapshot_config": {
+					"type": "object",
+					"properties": {
+						"state_snapshot_type": {
+							"oneOf": [
+								{
+									"type": "string",
+									"enum": [
+										"Enabled",
+										"GarbageCollect",
+										"ForcedGarbageCollect",
+										"Rollback",
+										"NoSnapshot"
+									]
+								},
+								{ "type": "null" }
+							]
+						}
+					}
+				}
+			}
+		},
+		"state_sync_enabled": { "type": "boolean", "default": true },
+		"state_sync": {
+			"type": "object",
+			"properties": {
+				"sync": {
+					"type": "object",
+					"properties": {
+						"ExternalStorage": {
+							"type": "object",
+							"properties": {
+								"location": {
+									"type": "object",
+									"properties": {
+										"GCS": {
+											"type": "object",
+											"properties": {
+												"bucket": { "type": "string" }
+											},
+											"required": ["bucket"]
+										}
+									}
+								},
+								"num_concurrent_requests": { "type": "integer", "default": 25 },
+								"num_concurrent_requests_during_catchup": { "type": "integer", "default": 5 }
+							},
+							"required": ["location"]
+						}
+					}
+				}
+			}
+		},
+		"transaction_pool_size_limit": { "type": "integer", "default": 100000000 },
+		"gc_step_period": { "$ref": "#/definitions/Duration" }
+	},
+	"definitions": {
+		"Duration": {
+			"type": "object",
+			"properties": {
+				"secs": { "type": "integer", "default": 0 },
+				"nanos": { "type": "integer", "default": 0 }
+			},
+			"required": ["secs", "nanos"]
+		}
+	},
+	"required": [
+		"max_loaded_contracts",
+		"genesis_file",
+		"validator_key_file",
+		"node_key_file",
+		"rpc",
+		"telemetry",
+		"network",
+		"consensus"
+	]
 }

@@ -44,7 +44,6 @@ both of the `_key.json` files have the same structure, the "node_key.json" is ge
 
 data folder
 
-
 ##### config.json
 
 the config.json file, see [near-nodes.io/validator/compile-and-run-a-node#31-set-up-the-config-file-for-your-needs-1](https://near-nodes.io/validator/compile-and-run-a-node#31-set-up-the-config-file-for-your-needs-1)

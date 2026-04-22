@@ -2,12 +2,10 @@
 
 🟨 json schema for near node config
 
-
 see...
+
 - [SCHEMA.md](./SCHEMA.md)
 - [config.schema.json](./config.schema.json)
-
-
 
 ---
 
