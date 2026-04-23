@@ -1,6 +1,6 @@
 # stickynode
 
-🟨 how to set up and run a near node, json schema for config
+🟨 how to set up and run a near validator node, json schema for config
 
 ---
 

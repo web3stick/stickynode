@@ -1,5 +1,6 @@
 import { mdsvex } from "mdsvex";
 import adapter from "@sveltejs/adapter-auto";
+// import adapter from "@sveltejs/adapter-auto";
 import { createHighlighter } from "shiki";
 import { transformerMetaHighlight } from "@shikijs/transformers";
 

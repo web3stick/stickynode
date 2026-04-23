@@ -5,7 +5,7 @@
 
 # stickynode
 
-🟨 how to set up and run a near node
+🟨 how to set up and run a near validator node
 
 <!-- ============================================ -->
 <!-- ============================================ -->
