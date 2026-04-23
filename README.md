@@ -17,8 +17,8 @@ bun run tsc --noEmit
 
 # netlify
 # stickyweb-stickynode
-netlify deploy
-netlify deploy --prod
+# netlify deploy
+# netlify deploy --prod
 ```
 
 ---
