@@ -49,6 +49,8 @@ and also you should have generated a keypair and used that public key when creat
 
 you are now ready to restart your near node for these changes to take effect!
 
+ℹ️ you can update the public key for your pool account by calling this method "update_staking_key", with "stake_public_key" in the args
+
 <!-- ============================================ -->
 <!-- ============================================ -->
 
