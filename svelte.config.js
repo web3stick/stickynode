@@ -1,6 +1,5 @@
 import { mdsvex } from "mdsvex";
-import adapter from "@sveltejs/adapter-auto";
-// import adapter from "@sveltejs/adapter-auto";
+import adapter from "@sveltejs/adapter-static";
 import { createHighlighter } from "shiki";
 import { transformerMetaHighlight } from "@shikijs/transformers";
 
@@ -34,7 +33,16 @@ const config = {
 		runes: ({ filename }) => (filename.split(/[/\\]/).includes("node_modules") ? undefined : true)
 	},
 	kit: {
-		adapter: adapter()
+		adapter: adapter({
+			pages: "build",
+			assets: "build",
+			fallback: undefined,
+			precompress: false,
+			strict: true
+		}),
+		prerender: {
+			handleHttpError: "warn"
+		}
 	},
 	preprocess: [
 		mdsvex({

@@ -44,7 +44,6 @@ this guide assumes that you have near cli set up and that you are logged in and 
 
 ---
 
-
 make sure to update your "validator_key.json" file with your pool account id
 and also you should have generated a keypair and used that public key when creating the pool.near account
 
