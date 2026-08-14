@@ -138,7 +138,6 @@
 				"max_block_production_delay": { "$ref": "#/definitions/Duration" },
 				"max_block_wait_delay": { "$ref": "#/definitions/Duration" },
 				"produce_empty_blocks": { "type": "boolean", "default": true },
-				"block_fetch_horizon": { "type": "integer", "default": 50 },
 				"block_header_fetch_horizon": { "type": "integer", "default": 50 },
 				"catchup_step_period": { "$ref": "#/definitions/Duration" },
 				"chunk_request_retry_period": { "$ref": "#/definitions/Duration" },
@@ -240,27 +239,7 @@
 					"type": "array",
 					"default": []
 				},
-				"load_mem_tries_for_tracked_shards": { "type": "boolean" },
-				"state_snapshot_config": {
-					"type": "object",
-					"properties": {
-						"state_snapshot_type": {
-							"oneOf": [
-								{
-									"type": "string",
-									"enum": [
-										"Enabled",
-										"GarbageCollect",
-										"ForcedGarbageCollect",
-										"Rollback",
-										"NoSnapshot"
-									]
-								},
-								{ "type": "null" }
-							]
-						}
-					}
-				}
+				"load_mem_tries_for_tracked_shards": { "type": "boolean" }
 			}
 		},
 		"state_sync_enabled": { "type": "boolean", "default": true },
@@ -268,30 +247,30 @@
 			"type": "object",
 			"properties": {
 				"sync": {
+					"type": "string",
+					"enum": ["Peers"],
+					"default": "Peers"
+				},
+				"concurrency": {
 					"type": "object",
 					"properties": {
-						"ExternalStorage": {
-							"type": "object",
-							"properties": {
-								"location": {
-									"type": "object",
-									"properties": {
-										"GCS": {
-											"type": "object",
-											"properties": {
-												"bucket": { "type": "string" }
-											},
-											"required": ["bucket"]
-										}
-									}
-								},
-								"num_concurrent_requests": { "type": "integer", "default": 25 },
-								"num_concurrent_requests_during_catchup": { "type": "integer", "default": 5 }
-							},
-							"required": ["location"]
-						}
+						"apply": { "type": "integer", "default": 4 },
+						"apply_during_catchup": { "type": "integer", "default": 1 },
+						"peer_downloads": { "type": "integer", "default": 10 },
+						"per_shard": { "type": "integer", "default": 6 }
 					}
+				},
+				"parts_compression_lvl": { "type": "integer", "default": 1 },
+				"dump": {
+					"oneOf": [{ "type": "object" }, { "type": "null" }]
 				}
+			}
+		},
+		"epoch_sync": {
+			"type": "object",
+			"properties": {
+				"epoch_sync_horizon_num_epochs": { "type": "integer", "default": 2 },
+				"timeout_for_epoch_sync": { "$ref": "#/definitions/Duration" }
 			}
 		},
 		"transaction_pool_size_limit": { "type": "integer", "default": 100000000 },
