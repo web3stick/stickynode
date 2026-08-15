@@ -29,83 +29,10 @@ docker run --rm -v $HOME/.near:/root/.near nearprotocol/nearcore:$CHAIN_ID neard
 
 ---
 
-## boot nodes from multiple RPCs (better sync)
+📌 **looking for faster state sync?** see:
 
-The default `boot_nodes` field is empty, and a single RPC's `network_info` view only shows ~30–40 viable candidates. Querying **multiple RPCs** and merging their peer lists gives you ~100+ diverse boot nodes — this dramatically improves state sync speed (especially for the "stuck on a few shards" problem) because different RPCs peer into different clusters (regular RPCs, archival nodes, hosted services, etc.).
-
-```sh
-# Query multiple RPCs and merge their boot candidates (active peers that are also known producers)
-BOOT_NODES=$(for RPC in \
-  https://rpc.mainnet.near.org \
-  https://free.rpc.fastnear.com \
-  https://archival-rpc.mainnet.fastnear.com \
-  https://rpc.shitzuapes.xyz \
-  https://rpc.intea.rs; do
-  curl -s --max-time 20 -X POST "$RPC" \
-    -H "Content-Type: application/json" \
-    -d '{"jsonrpc":"2.0","method":"network_info","params":[],"id":"x"}' \
-  | jq -r '.result.active_peers as $list1 | .result.known_producers as $list2 |
-      $list1[] as $active_peer | $list2[] |
-      select(.peer_id == $active_peer.id) |
-      "\(.peer_id)@\(.active_peer.addr)"'
-done | sort -u | paste -sd "," -)
-
-# Write to config.json
-jq --arg newBootNodes "$BOOT_NODES" '.network.boot_nodes = $newBootNodes' \
-  ~/.near/config.json > ~/.near/config.tmp \
-  && mv ~/.near/config.json ~/.near/config.json.backup \
-  && mv ~/.near/config.tmp ~/.near/config.json
-
-echo "boot_nodes count: $(jq '.network.boot_nodes | split(",") | length' ~/.near/config.json)"
-```
-
-📋 as of August 2026 this returns ~110 unique boot nodes.
-
-### Why this matters
-
-- **Regular RPCs** (e.g. `rpc.mainnet.near.org`, `free.rpc.fastnear.com`) see ~30–40 viable peers each, mostly within their own cluster.
-- **Archival RPCs** (e.g. `archival-rpc.mainnet.fastnear.com`) peer heavily with other archival nodes and keep state parts for **every** epoch (no GC). They're the only source of older parts when shards get stuck.
-- **Hosted RPCs** (e.g. `intea.rs`, `shitzuapes.xyz`) peer into yet other clusters, often with low overlap to the official ones.
-
-Merging all of them ensures your node can find a wider set of peers and lift `max_num_peers` is actually saturated.
-
----
-
-## tune concurrency for faster state sync (advanced)
-
-The default `state_sync.concurrency` is conservative. For a fast host with 8+ CPU cores, bump these:
-
-```json
-"state_sync": {
-  "sync": "Peers",
-  "concurrency": {
-    "apply": 8,
-    "apply_during_catchup": 1,
-    "peer_downloads": 50,
-    "per_shard": 12
-  },
-  "parts_compression_lvl": 1
-}
-```
-
-Notes:
-- `peer_downloads` (default 10) controls concurrent state-part requests in flight. **Ceiling ~50–80** — past that, peers rate-limit you.
-- `apply` (default 4) is the trie-reconstruction parallelism. **Ceiling ≈ `cpu_cores - 2`** — raising it further causes RocksDB contention.
-- `per_shard` (default 6) is per-shard fairness cap. 12 works well.
-- `apply_during_catchup` (default 1) — leave alone, this is when the node is also catching up blocks.
-
-Also raise `network.max_num_peers` so the new boot nodes actually translate into more connections:
-
-```json
-"network": {
-  "max_num_peers": 60,
-  "ideal_connections_lo": 40,
-  "ideal_connections_hi": 50,
-  "minimum_outbound_peers": 8
-}
-```
-
-Requires a restart (concurrency is not hot-reloaded).
+- [**boot-nodes**](/boot-nodes) — multi-RPC script that yields ~100+ diverse boot nodes (this isn't docker-specific; works identically on bare-metal / systemd installs)
+- [**config → performance tuning**](/config#performance-tuning-state-sync-concurrency--network-peers) — tuned `state_sync.concurrency` and `network.max_num_peers` values for a fast host
 
 ---
 
