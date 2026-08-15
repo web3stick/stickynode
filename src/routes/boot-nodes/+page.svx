@@ -1,0 +1,53 @@
+<script lang="ts"></script>
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+# boot-nodes
+
+🟨 discovering a large, diverse boot-node set for faster state sync
+
+The default `boot_nodes` field is empty, and a single RPC's `network_info` view only shows ~30–40 viable candidates. Querying **multiple RPCs** and merging their peer lists gives you ~100+ diverse boot nodes — this dramatically improves state sync speed (especially for the "stuck on a few shards" problem) because different RPCs peer into different clusters (regular RPCs, archival nodes, hosted services, etc.).
+
+```sh
+# Query multiple RPCs and merge their boot candidates (active peers that are also known producers)
+BOOT_NODES=$(for RPC in \
+  https://rpc.mainnet.near.org \
+  https://free.rpc.fastnear.com \
+  https://archival-rpc.mainnet.fastnear.com \
+  https://rpc.shitzuapes.xyz \
+  https://rpc.intea.rs; do
+  curl -s --max-time 20 -X POST "$RPC" \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","method":"network_info","params":[],"id":"x"}' \
+  | jq -r '.result.active_peers as $list1 | .result.known_producers as $list2 |
+      $list1[] as $active_peer | $list2[] |
+      select(.peer_id == $active_peer.id) |
+      "\(.peer_id)@\(.active_peer.addr)"'
+done | sort -u | paste -sd "," -)
+
+# Write to config.json
+jq --arg newBootNodes "$BOOT_NODES" '.network.boot_nodes = $newBootNodes' \
+  ~/.near/config.json > ~/.near/config.tmp \
+  && mv ~/.near/config.json ~/.near/config.json.backup \
+  && mv ~/.near/config.tmp ~/.near/config.json
+
+echo "boot_nodes count: $(jq '.network.boot_nodes | split(",") | length' ~/.near/config.json)"
+```
+
+📋 as of August 2026 this returns ~110 unique boot nodes.
+
+## Why this matters
+
+- **Regular RPCs** (e.g. `rpc.mainnet.near.org`, `free.rpc.fastnear.com`) see ~30–40 viable peers each, mostly within their own cluster.
+- **Archival RPCs** (e.g. `archival-rpc.mainnet.fastnear.com`) peer heavily with other archival nodes and keep state parts for **every** epoch (no GC). They're the only source of older parts when shards get stuck.
+- **Hosted RPCs** (e.g. `intea.rs`, `shitzuapes.xyz`) peer into yet other clusters, often with low overlap to the official ones.
+
+Merging all of them ensures your node can find a wider set of peers and lift `max_num_peers` is actually saturated.
+
+see also: [config → performance tuning](/config#performance-tuning-state-sync-concurrency--network-peers) for the `max_num_peers` / `ideal_connections_*` / `minimum_outbound_peers` values that pair with this script.
+
+<!-- ============================================ -->
+<!-- ============================================ -->
+
+<style></style>
