@@ -26,6 +26,8 @@
 			<br />
 			<a href={ROUTES.docker.path}>{ROUTES.docker.label}</a>
 			<br />
+			<a href={ROUTES["boot-nodes"].path}>{ROUTES["boot-nodes"].label}</a>
+			<br />
 			<a href={ROUTES.pool.path}>{ROUTES.pool.label}</a>
 			<br />
 			<a href={ROUTES.near.path}>{ROUTES.near.label}</a>
