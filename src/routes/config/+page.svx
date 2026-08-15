@@ -90,10 +90,10 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 | `addr`                                  | P2P network listen address (default: "0.0.0.0:24567")                        |
 | `boot_nodes`                            | Comma-separated boot nodes format `ed25519:key@ip:port` (default: "")        |
 | `whitelist_nodes`                       | Whitelisted nodes (default: "")                                              |
-| `max_num_peers`                         | Maximum number of peers (default: 40)                                        |
-| `minimum_outbound_peers`                | Minimum outbound peer count (default: 5)                                     |
-| `ideal_connections_lo`                  | Ideal connections lower bound (default: 30)                                  |
-| `ideal_connections_hi`                  | Ideal connections upper bound (default: 35)                                  |
+| `max_num_peers`                         | Maximum number of peers (default: 60)                                        |
+| `minimum_outbound_peers`                | Minimum outbound peer count (default: 8)                                     |
+| `ideal_connections_lo`                  | Ideal connections lower bound (default: 40)                                  |
+| `ideal_connections_hi`                  | Ideal connections upper bound (default: 50)                                  |
 | `peer_recent_time_window`               | Peer recent time window (default: `{"secs": 600, "nanos": 0}` / 10min)       |
 | `safe_set_size`                         | Safe set size for archival nodes (default: 20)                               |
 | `archival_peer_connections_lower_bound` | Lower bound for archival peer connections (default: 10)                      |
@@ -207,10 +207,12 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 
 | Field                       | Description                                                                       |
 | --------------------------- | --------------------------------------------------------------------------------- |
-| `apply`                      | Concurrent "apply parts" tasks (default: 4). Heavy on disk; keep low.             |
-| `apply_during_catchup`       | Concurrent apply tasks during catchup (default: 1).                              |
-| `peer_downloads`             | Concurrent peer state-part requests (default: 10).                               |
-| `per_shard`                  | Max parallelism per shard for fairness (default: 6).                             |
+| `apply`                      | Concurrent "apply parts" tasks (default: 8). Trie reconstruction; ≈ `cpu_cores - 2` is the safe ceiling. |
+| `apply_during_catchup`       | Concurrent apply tasks during catchup (default: 1). Leave alone.                  |
+| `peer_downloads`             | Concurrent peer state-part requests (default: 50). Practical ceiling ~50–80 before peers rate-limit. |
+| `per_shard`                  | Max parallelism per shard for fairness (default: 12).                             |
+
+ℹ️ The upstream defaults (apply: 4, peer_downloads: 10, per_shard: 6) are conservative. The values above are tuned for a fast host with 8+ CPU cores and 16 GB+ RAM. Requires a restart — not hot-reloaded. See the [docker setup page](/docker) for context.
 
 **`state_sync.parts_compression_lvl`** — Zstd compression level for state parts (default: 1).
 

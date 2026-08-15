@@ -89,10 +89,10 @@
 				"addr": { "type": "string" },
 				"boot_nodes": { "type": "string" },
 				"whitelist_nodes": { "type": "string" },
-				"max_num_peers": { "type": "integer", "default": 40 },
-				"minimum_outbound_peers": { "type": "integer", "default": 5 },
-				"ideal_connections_lo": { "type": "integer", "default": 30 },
-				"ideal_connections_hi": { "type": "integer", "default": 35 },
+				"max_num_peers": { "type": "integer", "default": 60 },
+				"minimum_outbound_peers": { "type": "integer", "default": 8 },
+				"ideal_connections_lo": { "type": "integer", "default": 40 },
+				"ideal_connections_hi": { "type": "integer", "default": 50 },
 				"peer_recent_time_window": { "$ref": "#/definitions/Duration" },
 				"safe_set_size": { "type": "integer", "default": 20 },
 				"archival_peer_connections_lower_bound": { "type": "integer", "default": 10 },
@@ -254,10 +254,10 @@
 				"concurrency": {
 					"type": "object",
 					"properties": {
-						"apply": { "type": "integer", "default": 4 },
+						"apply": { "type": "integer", "default": 8 },
 						"apply_during_catchup": { "type": "integer", "default": 1 },
-						"peer_downloads": { "type": "integer", "default": 10 },
-						"per_shard": { "type": "integer", "default": 6 }
+						"peer_downloads": { "type": "integer", "default": 50 },
+						"per_shard": { "type": "integer", "default": 12 }
 					}
 				},
 				"parts_compression_lvl": { "type": "integer", "default": 1 },

@@ -35,10 +35,10 @@
 		"addr": "0.0.0.0:24567",
 		"boot_nodes": "",
 		"whitelist_nodes": "",
-		"max_num_peers": 40,
-		"minimum_outbound_peers": 5,
-		"ideal_connections_lo": 30,
-		"ideal_connections_hi": 35,
+		"max_num_peers": 60,
+		"minimum_outbound_peers": 8,
+		"ideal_connections_lo": 40,
+		"ideal_connections_hi": 50,
 		"peer_recent_time_window": {
 			"secs": 600,
 			"nanos": 0
@@ -209,10 +209,10 @@
 	"state_sync": {
 		"sync": "Peers",
 		"concurrency": {
-			"apply": 4,
+			"apply": 8,
 			"apply_during_catchup": 1,
-			"peer_downloads": 10,
-			"per_shard": 6
+			"peer_downloads": 50,
+			"per_shard": 12
 		},
 		"parts_compression_lvl": 1
 	},
