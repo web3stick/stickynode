@@ -35,10 +35,10 @@
 		"addr": "0.0.0.0:24567",
 		"boot_nodes": "",
 		"whitelist_nodes": "",
-		"max_num_peers": 60,
-		"minimum_outbound_peers": 8,
-		"ideal_connections_lo": 40,
-		"ideal_connections_hi": 50,
+		"max_num_peers": 80,
+		"minimum_outbound_peers": 12,
+		"ideal_connections_lo": 50,
+		"ideal_connections_hi": 65,
 		"peer_recent_time_window": {
 			"secs": 600,
 			"nanos": 0
@@ -158,6 +158,8 @@
 		"secs": 30,
 		"nanos": 0
 	},
+	"state_requests_per_throttle_period": 30,
+	"state_request_server_threads": 4,
 	"trie_viewer_state_size_limit": 50000,
 	"store": {
 		"path": null,
@@ -227,5 +229,35 @@
 	"gc_step_period": {
 		"secs": 0,
 		"nanos": 500000000
-	}
+	},
+	"state_requests_per_throttle_period": 30,
+	"state_request_server_threads": 4,
+	"resharding_config": {
+		"batch_size": 500000,
+		"batch_delay": {
+			"secs": 0,
+			"nanos": 5000000
+		},
+		"retry_delay": {
+			"secs": 10,
+			"nanos": 0
+		},
+		"initial_delay": {
+			"secs": 0,
+			"nanos": 0
+		},
+		"max_poll_time": {
+			"secs": 7200,
+			"nanos": 0
+		},
+		"catch_up_blocks": 20
+	},
+	"tx_routing_height_horizon": 4,
+	"disable_tx_routing": false,
+	"orphan_state_witness_pool_size": 25,
+	"orphan_state_witness_max_size": 40000000,
+	"contract_cache_max_size": 128000000000,
+	"save_latest_witnesses": false,
+	"save_invalid_witnesses": false,
+	"transaction_request_handler_threads": 4
 }

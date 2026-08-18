@@ -90,10 +90,10 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 | `addr`                                  | P2P network listen address (default: "0.0.0.0:24567")                        |
 | `boot_nodes`                            | Comma-separated boot nodes format `ed25519:key@ip:port` (default: "")        |
 | `whitelist_nodes`                       | Whitelisted nodes (default: "")                                              |
-| `max_num_peers`                         | Maximum number of peers (default: 60)                                        |
-| `minimum_outbound_peers`                | Minimum outbound peer count (default: 8)                                     |
-| `ideal_connections_lo`                  | Ideal connections lower bound (default: 40)                                  |
-| `ideal_connections_hi`                  | Ideal connections upper bound (default: 50)                                  |
+| `max_num_peers`                         | Maximum number of peers (default: 100)                                       |
+| `minimum_outbound_peers`                | Minimum outbound peer count (default: 16)                                    |
+| `ideal_connections_lo`                  | Ideal connections lower bound (default: 60)                                  |
+| `ideal_connections_hi`                  | Ideal connections upper bound (default: 80)                                  |
 | `peer_recent_time_window`               | Peer recent time window (default: `{"secs": 600, "nanos": 0}` / 10min)       |
 | `safe_set_size`                         | Safe set size for archival nodes (default: 20)                               |
 | `archival_peer_connections_lower_bound` | Lower bound for archival peer connections (default: 10)                      |
@@ -207,49 +207,50 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 
 | Field                  | Description                                                                                              |
 | ---------------------- | -------------------------------------------------------------------------------------------------------- |
-| `apply`                | Concurrent "apply parts" tasks (default: 8). Trie reconstruction; ≈ `cpu_cores - 2` is the safe ceiling. |
+| `apply`                | Concurrent "apply parts" tasks (default: 12). Trie reconstruction; ≈ `cpu_cores - 2` is the safe ceiling. |
 | `apply_during_catchup` | Concurrent apply tasks during catchup (default: 1). Leave alone.                                         |
-| `peer_downloads`       | Concurrent peer state-part requests (default: 50). Practical ceiling ~50–80 before peers rate-limit.     |
-| `per_shard`            | Max parallelism per shard for fairness (default: 12).                                                    |
+| `peer_downloads`       | Concurrent peer state-part requests (default: 150). Practical ceiling ~80–150 before peers rate-limit.    |
+| `per_shard`            | Max parallelism per shard for fairness (default: 24).                                                    |
 
-ℹ️ The upstream defaults (apply: 4, peer_downloads: 10, per_shard: 6) are conservative. The values above are tuned for a fast host with 8+ CPU cores and 16 GB+ RAM. Requires a restart — not hot-reloaded. See the [Performance Tuning](#performance-tuning-state-sync-concurrency--network-peers) subsection below for the full JSON blocks and ceilings, and [boot-nodes](/boot-nodes) for the multi-RPC boot-node discovery script.
+ℹ️ The schema defaults reflect tuned values for a fast host with 8+ CPU cores, 16 GB+ RAM, and 100+ peer connections. The conservative upstream defaults (apply: 4, peer_downloads: 10, per_shard: 6) are still valid for low-spec hosts. Requires a restart — not hot-reloaded. See the [Performance Tuning](#performance-tuning-state-sync-concurrency--network-peers) subsection below for the full JSON blocks and ceilings, and [boot-nodes](/boot-nodes) for the multi-RPC boot-node discovery script.
 
-**`state_sync.parts_compression_lvl`** — Zstd compression level for state parts (default: 1).
+**`state_sync.parts_compression_lvl`** — Zstd compression level for state parts (default: 0).
 
 **`state_sync.dump`** — optional config to dump state to external storage. `null` disables dumping. Mostly relevant for archival node operators.
 
 ### Performance Tuning (State Sync Concurrency + Network Peers)
 
-The default `state_sync.concurrency` is conservative. For a fast host with 8+ CPU cores, bump these:
+The schema defaults now reflect tuned values for a fast host. For lower-spec hosts, dial back:
 
 ```json
 "state_sync": {
   "sync": "Peers",
   "concurrency": {
-    "apply": 8,
+    "apply": 12,
     "apply_during_catchup": 1,
-    "peer_downloads": 50,
-    "per_shard": 12
+    "peer_downloads": 150,
+    "per_shard": 24
   },
-  "parts_compression_lvl": 1
+  "parts_compression_lvl": 0
 }
 ```
 
 Notes:
 
-- `peer_downloads` (default 10) controls concurrent state-part requests in flight. **Ceiling ~50–80** — past that, peers rate-limit you.
-- `apply` (default 4) is the trie-reconstruction parallelism. **Ceiling ≈ `cpu_cores - 2`** — raising it further causes RocksDB contention.
-- `per_shard` (default 6) is per-shard fairness cap. 12 works well.
-- `apply_during_catchup` (default 1) — leave alone, this is when the node is also catching up blocks.
+- `peer_downloads` controls concurrent state-part requests in flight. **Ceiling ~80–150** — past that, peers rate-limit you. Set to 150 successfully on 8-core / 30 GB machine with 100+ peers.
+- `apply` is the trie-reconstruction parallelism. **Ceiling ≈ `cpu_cores - 2`** — raising it further causes RocksDB contention. Stays at 12 on 8-core.
+- `per_shard` is per-shard fairness cap. 24 works well on 8-core.
+- `apply_during_catchup` — leave alone (default 1), this is when the node is also catching up blocks.
+- `parts_compression_lvl: 0` skips zstd decompression entirely. Speeds up apply by ~5-15ms per part at the cost of larger download.
 
 Also raise `network.max_num_peers` so a populated `boot_nodes` list (see [boot-nodes](/boot-nodes)) actually translates into more connections:
 
 ```json
 "network": {
-  "max_num_peers": 60,
-  "ideal_connections_lo": 40,
-  "ideal_connections_hi": 50,
-  "minimum_outbound_peers": 8
+  "max_num_peers": 100,
+  "ideal_connections_lo": 60,
+  "ideal_connections_hi": 80,
+  "minimum_outbound_peers": 16
 }
 ```
 
@@ -263,6 +264,48 @@ Requires a restart (concurrency is not hot-reloaded).
 | `timeout_for_epoch_sync`        | Timeout for epoch-sync requests; node retries indefinitely (default: `{"secs": 60, "nanos": 0}`). |
 
 ℹ️ `state_sync_enabled` (top-level boolean) is the legacy switch — keep it `true` unless you're an archival operator. The actual sync mechanism is chosen by `state_sync.sync`.
+
+### Throttling & Resource Pool (Top-Level)
+
+| Field                                       | Description                                                                                  |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `state_request_throttle_period`            | Throttle window for state requests (default: `{"secs": 30, "nanos": 0}`).                  |
+| `state_requests_per_throttle_period`        | Max state requests per throttle period (default: 30). Raise to 60 for high-throughput nodes. |
+| `state_request_server_threads`             | Thread pool size for the state-request server (default: 4).                                  |
+| `view_client_threads`                      | Thread pool size for view client (default: 4). RPC queries handled here.                    |
+| `transaction_request_handler_threads`      | Thread pool size for transaction request handler (default: 4).                                |
+| `orphan_state_witness_pool_size`           | Pool size for orphan chunk state witnesses (default: 25).                                   |
+| `orphan_state_witness_max_size`            | Max size of an orphan state witness in bytes (default: 40000000 ≈ 40 MB).                   |
+
+### Resharding (Dynamic Shard Reconfiguration)
+
+**`resharding_config`** — parameters for dynamic shard resharding.
+
+| Field              | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| `batch_size`       | Soft limit on resharding batch size in bytes (default: 500000 ≈ 500 KB).                    |
+| `batch_delay`      | Delay between batches (default: `{"secs": 0, "nanos": 5000000}` / 5 ms).                    |
+| `retry_delay`      | Delay between retry attempts on failure (default: `{"secs": 10, "nanos": 0}`).                |
+| `initial_delay`    | Initial delay before resharding starts (default: `{"secs": 0, "nanos": 0}`).                  |
+| `max_poll_time`    | Max time to poll for resharding state (default: `{"secs": 7200, "nanos": 0}` / 2 hours).    |
+| `catch_up_blocks`  | Number of blocks to catch up after resharding (default: 20).                                |
+
+### Transaction Routing
+
+| Field                            | Description                                                                                |
+| -------------------------------- | ------------------------------------------------------------------------------------------ |
+| `tx_routing_height_horizon`      | If node is not chunk producer within this many blocks, route to upcoming producers (default: 4). |
+| `disable_tx_routing`             | If true, don't forward transactions to next chunk producers (default: false).               |
+| `produce_chunk_add_transactions_time_limit` | Max time for adding transactions to a chunk (Duration).                      |
+
+### Contract Cache & State Witness
+
+| Field                            | Description                                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `contract_cache_max_size`        | Max size of the compiled-contract cache (default: 128000000000 ≈ 128 GB).                              |
+| `contract_cache_path`            | Path to store contract cache. `null` means default location.                                            |
+| `save_latest_witnesses`          | Save observed `ChunkStateWitness` to `DBCol::LatestChunkStateWitnesses` (default: false).            |
+| `save_invalid_witnesses`         | Save invalid witnesses to `DBCol::InvalidChunkStateWitnesses` (default: false). Off in production. |
 
 ### Key Differences: RPC vs Validator
 

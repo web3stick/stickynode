@@ -89,10 +89,10 @@
 				"addr": { "type": "string" },
 				"boot_nodes": { "type": "string" },
 				"whitelist_nodes": { "type": "string" },
-				"max_num_peers": { "type": "integer", "default": 60 },
-				"minimum_outbound_peers": { "type": "integer", "default": 8 },
-				"ideal_connections_lo": { "type": "integer", "default": 40 },
-				"ideal_connections_hi": { "type": "integer", "default": 50 },
+				"max_num_peers": { "type": "integer", "default": 100 },
+				"minimum_outbound_peers": { "type": "integer", "default": 16 },
+				"ideal_connections_lo": { "type": "integer", "default": 60 },
+				"ideal_connections_hi": { "type": "integer", "default": 80 },
 				"peer_recent_time_window": { "$ref": "#/definitions/Duration" },
 				"safe_set_size": { "type": "integer", "default": 20 },
 				"archival_peer_connections_lower_bound": { "type": "integer", "default": 10 },
@@ -153,7 +153,11 @@
 					"type": "array",
 					"items": { "type": "integer" },
 					"default": [1, 3]
-				}
+				},
+				"state_sync_p2p_timeout": { "$ref": "#/definitions/Duration" },
+				"state_sync_retry_backoff": { "$ref": "#/definitions/Duration" },
+				"state_sync_external_timeout": { "$ref": "#/definitions/Duration" },
+				"sync_max_block_requests": { "type": "integer", "default": 10 }
 			},
 			"required": ["min_num_peers"]
 		},
@@ -254,13 +258,13 @@
 				"concurrency": {
 					"type": "object",
 					"properties": {
-						"apply": { "type": "integer", "default": 8 },
+						"apply": { "type": "integer", "default": 12 },
 						"apply_during_catchup": { "type": "integer", "default": 1 },
-						"peer_downloads": { "type": "integer", "default": 50 },
-						"per_shard": { "type": "integer", "default": 12 }
+						"peer_downloads": { "type": "integer", "default": 150 },
+						"per_shard": { "type": "integer", "default": 24 }
 					}
 				},
-				"parts_compression_lvl": { "type": "integer", "default": 1 },
+				"parts_compression_lvl": { "type": "integer", "default": 0 },
 				"dump": {
 					"oneOf": [{ "type": "object" }, { "type": "null" }]
 				}
@@ -274,7 +278,30 @@
 			}
 		},
 		"transaction_pool_size_limit": { "type": "integer", "default": 100000000 },
-		"gc_step_period": { "$ref": "#/definitions/Duration" }
+		"gc_step_period": { "$ref": "#/definitions/Duration" },
+		"state_requests_per_throttle_period": { "type": "integer", "default": 30 },
+		"state_request_server_threads": { "type": "integer", "default": 4 },
+		"resharding_config": {
+			"type": "object",
+			"properties": {
+				"batch_size": { "type": "integer", "default": 500000 },
+				"batch_delay": { "$ref": "#/definitions/Duration" },
+				"retry_delay": { "$ref": "#/definitions/Duration" },
+				"initial_delay": { "$ref": "#/definitions/Duration" },
+				"max_poll_time": { "$ref": "#/definitions/Duration" },
+				"catch_up_blocks": { "type": "integer", "default": 20 }
+			}
+		},
+		"tx_routing_height_horizon": { "type": "integer", "default": 4 },
+		"disable_tx_routing": { "type": "boolean", "default": false },
+		"produce_chunk_add_transactions_time_limit": { "$ref": "#/definitions/Duration" },
+		"orphan_state_witness_pool_size": { "type": "integer", "default": 25 },
+		"orphan_state_witness_max_size": { "type": "integer", "default": 40000000 },
+		"contract_cache_max_size": { "type": "integer", "default": 128000000000 },
+		"save_latest_witnesses": { "type": "boolean", "default": false },
+		"save_invalid_witnesses": { "type": "boolean", "default": false },
+		"transaction_request_handler_threads": { "type": "integer", "default": 4 },
+		"contract_cache_path": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
 	},
 	"definitions": {
 		"Duration": {
