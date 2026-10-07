@@ -90,10 +90,10 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 | `addr`                                  | P2P network listen address (default: "0.0.0.0:24567")                        |
 | `boot_nodes`                            | Comma-separated boot nodes format `ed25519:key@ip:port` (default: "")        |
 | `whitelist_nodes`                       | Whitelisted nodes (default: "")                                              |
-| `max_num_peers`                         | Maximum number of peers (default: 100)                                       |
-| `minimum_outbound_peers`                | Minimum outbound peer count (default: 16)                                    |
-| `ideal_connections_lo`                  | Ideal connections lower bound (default: 60)                                  |
-| `ideal_connections_hi`                  | Ideal connections upper bound (default: 80)                                  |
+| `max_num_peers`                         | Maximum number of peers (upstream default: 40 — tuned to 100, see below)              |
+| `minimum_outbound_peers`                | Minimum outbound peer count (upstream default: 5 — tuned to 16, see below)            |
+| `ideal_connections_lo`                  | Ideal connections lower bound (upstream default: 30 — tuned to 60, see below)        |
+| `ideal_connections_hi`                  | Ideal connections upper bound (upstream default: 35 — tuned to 80, see below)        |
 | `peer_recent_time_window`               | Peer recent time window (default: `{"secs": 600, "nanos": 0}` / 10min)       |
 | `safe_set_size`                         | Safe set size for archival nodes (default: 20)                               |
 | `archival_peer_connections_lower_bound` | Lower bound for archival peer connections (default: 10)                      |
@@ -125,7 +125,7 @@ Duration objects contain `secs` and `nanos` (e.g. `{"secs": 10, "nanos": 0}` = 1
 | `min_num_peers`                          | Minimum peers required for block production (default: 3)                             |
 | `block_production_tracking_delay`        | Block production tracking delay (default: `{"secs": 0, "nanos": 100000000}` / 100ms) |
 | `min_block_production_delay`             | Min block production delay (default: `{"secs": 0, "nanos": 600000000}` / 600ms)      |
-| `max_block_production_delay`             | Max block production delay (default: `{"secs": 1, "nanos": 1800000000}` / 1.8s)      |
+| `max_block_production_delay`             | Max block production delay (default: `{"secs": 1, "nanos": 800000000}` / 1.8s)      |
 | `max_block_wait_delay`                   | Max block wait delay (default: `{"secs": 6, "nanos": 0}`)                            |
 | `produce_empty_blocks`                   | Produce empty blocks (default: true)                                                 |
 | `block_header_fetch_horizon`             | Block header fetch horizon (default: 50)                                             |

@@ -125,6 +125,19 @@
 						"connect_only_to_boot_nodes": { "type": "boolean", "default": false },
 						"skip_sending_tombstones_seconds": { "type": "integer", "default": 0 }
 					}
+				},
+				"so_recv_buffer_size": { "oneOf": [{ "type": "integer" }, { "type": "null" }], "default": 1000000 },
+				"so_send_buffer_size": { "oneOf": [{ "type": "integer" }, { "type": "null" }], "default": 1000000 },
+				"snapshot_hosts_cache_size": { "type": "integer", "default": 1000 },
+				"tier1": {
+					"type": "object",
+					"properties": {
+						"enable_inbound": { "type": "boolean", "default": true },
+						"enable_outbound": { "type": "boolean", "default": true },
+						"connect_interval": { "$ref": "#/definitions/Duration" },
+						"new_connections_per_attempt": { "type": "integer", "default": 50 },
+						"advertise_proxies_interval": { "$ref": "#/definitions/Duration" }
+					}
 				}
 			},
 			"required": ["addr", "boot_nodes", "whitelist_nodes"]
@@ -294,7 +307,7 @@
 		},
 		"tx_routing_height_horizon": { "type": "integer", "default": 4 },
 		"disable_tx_routing": { "type": "boolean", "default": false },
-		"produce_chunk_add_transactions_time_limit": { "$ref": "#/definitions/Duration" },
+		"produce_chunk_add_transactions_time_limit": { "oneOf": [{ "$ref": "#/definitions/Duration" }, { "type": "null" }] },
 		"orphan_state_witness_pool_size": { "type": "integer", "default": 25 },
 		"orphan_state_witness_max_size": { "type": "integer", "default": 40000000 },
 		"contract_cache_max_size": { "type": "integer", "default": 128000000000 },

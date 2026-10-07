@@ -52,6 +52,8 @@ the config.json file, see [near-nodes.io/validator/compile-and-run-a-node#31-set
 - [Archival RPC Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/archival/config.json) stores all the info starting for genesis, can serve RPC queries for the entire history. Requires significant storage.
 - [Validator Node](https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/mainnet/validator/config.json) is designed for the validators. Heavily optimized, does not store the full state, and cannot serve RPC queries.
 
+ℹ️ the S3 files above are a minimal bootable base, not a tuned config: `boot_nodes` ships empty, `state_sync` ships `null` (falls back to conservative code defaults), peer counts are conservative, and as of `neard 2.13.4` the S3 bundle still contains the removed `consensus.block_fetch_horizon` key (node logs a warning and starts anyway). After `neard init`, apply the [boot-nodes](/boot-nodes) script and the tuned values from [config](/config) — or start from the ready-made `static/json/config.rpc.json` / `config.validator.json` in this repo, which are rebased on `neard 2.13.4` output.
+
 see [config.md]({ROUTES.config.path}), for json schema for config.json
 
 <!-- ============================================ -->
