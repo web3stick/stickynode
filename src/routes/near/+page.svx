@@ -54,6 +54,12 @@ the config.json file, see [near-nodes.io/validator/compile-and-run-a-node#31-set
 
 ℹ️ the S3 files above are a minimal bootable base, not a tuned config: `boot_nodes` ships empty, `state_sync` ships `null` (falls back to conservative code defaults), peer counts are conservative, and as of `neard 2.13.4` the S3 bundle still contains the removed `consensus.block_fetch_horizon` key (node logs a warning and starts anyway). After `neard init`, apply the [boot-nodes](/boot-nodes) script and the tuned values from [config](/config) — or start from the ready-made `static/json/config.rpc.json` / `config.validator.json` in this repo, which are rebased on `neard 2.13.4` output.
 
+⚠️ state sync *delivers* inbound: peers open connections back to you to push state parts. Two things are mandatory or state sync fails forever while headers look fine: (1) forward **TCP 24567 → your node** on your router/NAT, and (2) if behind NAT set `network.experimental.tier3_public_addr` to `"YOUR_PUBLIC_IP:24567"` (verify with `curl localhost:3031/metrics | grep near_tier3_public_addr` after setting `rpc.prometheus_addr`). Without both, the node follows head perfectly and holds zero state — height lies, only queries tell the truth (see below).
+
+ℹ️ **height is necessary, queries are sufficient.** `syncing: false` at head proves header sync only. Verify real state with a view call, e.g. `query(view_account)` for an account on each tracked shard — `UNAVAILABLE_SHARD` means the node has no data for that shard (the message says "does not track" but the code raises it on missing chunk/state data), regardless of what the config lists.
+
+ℹ️ **explicit `tracked_shards_config: {"Shards": [...]}` cannot bootstrap state from scratch** (verified live on `neard 2.13.4`): shard matching needs epoch-manager lookups, lookup errors are masked as "not tracked", the tracking set resolves empty, and state sync "completes" instantly with zero work (`tracking_shards=[]` in debug logs). Workaround: sync with `"AllShards"` first (it skips the lookups), then narrow to an explicit list *after* `syncing: false` + passing queries — narrowing a state-holding node is a minutes-long block catch-up.
+
 see [config.md]({ROUTES.config.path}), for json schema for config.json
 
 <!-- ============================================ -->
